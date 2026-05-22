@@ -49,18 +49,22 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
       />
     ),
   },
-  // OpenAI — a faulty CRT terminal, tinted to the partnership's teal.
+  // OpenAI — a faulty CRT terminal in clean white.
   'salesforce-openai-mcp': {
     opacity: 0.9,
     render: () => (
       <FaultyTerminal
-        tint="#74AA9C"
-        brightness={0.85}
-        scanlineIntensity={0.4}
-        timeScale={0.35}
+        tint="#ffffff"
+        scale={1.6}
+        digitSize={0.7}
+        timeScale={0.5}
+        noiseAmp={0.5}
+        brightness={0.3}
+        scanlineIntensity={0}
         curvature={0}
         mouseReact
         mouseStrength={0.5}
+        pageLoadAnimation
       />
     ),
   },
