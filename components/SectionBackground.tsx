@@ -24,7 +24,7 @@ interface BackgroundConfig {
    * would clash with the section's flat background at the seams).
    */
   fade?: 'both' | 'top' | 'none';
-  render: () => ReactNode;
+  render: (isMobile: boolean) => ReactNode;
 }
 
 // Each project's effect is themed to its own palette and echoes the metaphor
@@ -101,9 +101,9 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
   elevar: {
     opacity: 0.9,
     fade: 'top',
-    render: () => (
+    render: (isMobile) => (
       <Ballpit
-        count={160}
+        count={isMobile ? 50 : 160}
         colors={[0xc8befa, 0xffffff, 0x9b8cff]}
         gravity={0.4}
         friction={0.9975}
@@ -139,6 +139,17 @@ export function SectionBackground({ slug }: { slug: string }) {
   const { active } = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Track phone-width viewports so effects can scale down (e.g. fewer balls).
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mq = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   // Mount the effect a little before the section enters and unmount once it's
   // well past, bounding the number of simultaneous WebGL contexts.
@@ -189,7 +200,7 @@ export function SectionBackground({ slug }: { slug: string }) {
         WebkitMaskImage: edgeFade,
       }}
     >
-      {mounted ? config.render() : null}
+      {mounted ? config.render(isMobile) : null}
     </div>
   );
 }

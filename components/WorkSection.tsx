@@ -88,22 +88,8 @@ export function WorkSection({ entry, index, total, artwork, onOpen }: WorkSectio
         <div className="grid grid-cols-1 md:grid-cols-12 gap-y-12 gap-x-8 items-center">
           <motion.div
             {...reveal}
-            className="pointer-events-auto relative md:col-span-5 flex flex-col gap-6"
+            className="pointer-events-auto md:col-span-5 flex flex-col gap-6"
           >
-            {/* Mobile-only legibility scrim: full-bleed effects sit directly
-                behind the stacked text on small screens, so a soft radial wash
-                in the section color keeps the copy readable. A radial mask
-                fades it to transparent at the edges so there's no visible halo. */}
-            <div
-              aria-hidden="true"
-              className="md:hidden absolute -inset-x-6 -inset-y-10 -z-10"
-              style={{
-                background: 'var(--theme-bg)',
-                opacity: 0.8,
-                maskImage: 'radial-gradient(ellipse at center, black 38%, transparent 80%)',
-                WebkitMaskImage: 'radial-gradient(ellipse at center, black 38%, transparent 80%)',
-              }}
-            />
             <SectionText
               entry={entry}
               index={index}
