@@ -10,7 +10,7 @@ description: CRM that fits a small team. Sales, service, marketing, commerce, an
 publicReference: https://www.salesforce.com/small-business/pro-suite/
 href: https://www.salesforce.com/small-business/pro-suite/
 external: false
-bg: "#00A0E0"
+bg: "#0A1E30"
 ink: "#FFFFFF"
 accent: "#032D60"
 statement: "I direct design for Salesforce Suite — CRM that fits a small team."

@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import type { WorkEntry } from '@/lib/content';
 import { SectionThemeWrapper, type SectionTheme } from './ThemeProvider';
 import { GlitchRedacted } from './GlitchRedacted';
+import { SectionBackground, hasSectionBackground } from './SectionBackground';
 
 interface WorkSectionProps {
   entry: WorkEntry;
@@ -78,15 +79,31 @@ export function WorkSection({ entry, index, total, artwork, onOpen }: WorkSectio
       className="relative w-full min-h-screen flex items-center overflow-visible"
       style={{ color: theme.ink }}
     >
+      <SectionBackground slug={entry.slug} />
+
       <div
         ref={contentRef}
-        className="w-full px-[clamp(24px,6vw,96px)] py-[14vh] md:py-[18vh] mx-auto max-w-[1280px]"
+        className="pointer-events-none relative z-10 w-full px-[clamp(24px,6vw,96px)] py-[14vh] md:py-[18vh] mx-auto max-w-[1280px]"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-y-12 gap-x-8 items-center">
           <motion.div
             {...reveal}
-            className="md:col-span-5 flex flex-col gap-6"
+            className="pointer-events-auto relative md:col-span-5 flex flex-col gap-6"
           >
+            {/* Mobile-only legibility scrim: full-bleed effects sit directly
+                behind the stacked text on small screens, so a soft radial wash
+                in the section color keeps the copy readable. A radial mask
+                fades it to transparent at the edges so there's no visible halo. */}
+            <div
+              aria-hidden="true"
+              className="md:hidden absolute -inset-x-6 -inset-y-10 -z-10"
+              style={{
+                background: 'var(--theme-bg)',
+                opacity: 0.8,
+                maskImage: 'radial-gradient(ellipse at center, black 38%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at center, black 38%, transparent 80%)',
+              }}
+            />
             <SectionText
               entry={entry}
               index={index}
@@ -243,6 +260,9 @@ function Artwork({
   isLocked: boolean;
 }) {
   if (artwork) return <>{artwork}</>;
+
+  // The section background effect stands in for the glitch silhouette here.
+  if (hasSectionBackground(entry.slug)) return null;
 
   if (entry.image) {
     return (
