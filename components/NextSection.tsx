@@ -3,6 +3,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { SectionThemeWrapper, type SectionTheme } from './ThemeProvider';
+import { ScrambleText } from './ScrambleText';
 
 const NEXT_THEME: SectionTheme = {
   id: 'next',
@@ -34,15 +35,20 @@ export function NextSection() {
         {...reveal}
         className="w-full px-[clamp(24px,6vw,96px)] mx-auto max-w-[960px]"
       >
-        <p className="font-mono text-[12px] md:text-[13px] tracking-[0.06em] uppercase opacity-60 m-0">
-          Next
-        </p>
-        <h2
+        <ScrambleText
+          as="p"
+          active={inView}
+          text="Next"
+          className="font-mono text-[12px] md:text-[13px] tracking-[0.06em] uppercase opacity-60 m-0"
+        />
+        <ScrambleText
+          as="h2"
+          active={inView}
+          text="Let’s talk."
+          delay={220}
           className="mt-4 font-display m-0 leading-[1.05] tracking-[-0.022em]"
           style={{ fontSize: 'clamp(36px, 5vw, 64px)' }}
-        >
-          Let&rsquo;s talk.
-        </h2>
+        />
         <p className="mt-10 font-mono text-[14px] md:text-[15px] flex flex-wrap gap-x-5 gap-y-2 m-0">
           <a
             href="mailto:j@mcginn.co"

@@ -3,7 +3,8 @@ import './globals.css';
 import { Logo } from '@/components/Logo';
 import { KeyboardShortcuts } from '@/components/KeyboardShortcuts';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Statement } from '@/components/Statement';
+// Top-right glitch statement line — hidden for now (re-enable <Statement /> below).
+// import { Statement } from '@/components/Statement';
 import { SmoothScroll } from '@/components/SmoothScroll';
 import { personSchema, websiteSchema } from '@/lib/seo';
 
@@ -106,7 +107,7 @@ export default function RootLayout({
               <Logo className="h-14 w-auto" />
             </div>
           </header>
-          <Statement />
+          {/* <Statement /> — top-right glitch line, hidden for now */}
           {children}
           <KeyboardShortcuts />
         </ThemeProvider>

@@ -115,6 +115,26 @@ button:focus-visible {
   }
 }
 
+/*
+ * Signature "writing" reveal. A wipe edge (gradient-filled rect inside an SVG
+ * mask) is translated along the J→M diagonal (top-left → bottom-right), so the
+ * fill is uncovered in writing order. Travel starts just off the J (fully
+ * hidden) and ends past the M (fully revealed); the end state doubles as the
+ * reduced-motion / no-animation fallback.
+ */
+@keyframes sig-ink {
+  from {
+    transform: translate(8.75px, 4.85px);
+  }
+  to {
+    transform: translate(98px, 54.3px);
+  }
+}
+.sig-ink-reveal {
+  transform: translate(98px, 54.3px);
+  animation: sig-ink 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .hover-underline {
   border-bottom: 1px solid;
   border-color: color-mix(in oklab, currentColor 30%, transparent);

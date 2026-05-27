@@ -26,6 +26,7 @@ interface DotFieldProps {
   gradientFrom?: string;
   gradientTo?: string;
   glowColor?: string;
+  paused?: boolean;
   [key: string]: unknown;
 }
 
@@ -42,6 +43,7 @@ const DotField = memo(({
   gradientFrom = 'rgba(168, 85, 247, 0.35)',
   gradientTo = 'rgba(180, 151, 207, 0.25)',
   glowColor = '#120F17',
+  paused = false,
   ...rest
 }: DotFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -55,6 +57,9 @@ const DotField = memo(({
   const engagement = useRef(0);
   const propsRef = useRef<Record<string, unknown>>({});
   propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo };
+  // Live-updated each render; read in the rAF loop to idle while unfocused.
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
   const rebuildRef = useRef<(() => void) | null>(null);
   const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`);
 
@@ -135,6 +140,11 @@ const DotField = memo(({
     let frameCount = 0;
 
     function tick() {
+      // Idle while unfocused: keep the loop alive but skip the canvas work.
+      if (pausedRef.current) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
       frameCount++;
       const dots = dotsRef.current;
       const m = mouseRef.current;

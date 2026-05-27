@@ -9,6 +9,9 @@ export interface FaultyTerminalProps extends React.HTMLAttributes<HTMLDivElement
   digitSize?: number;
   timeScale?: number;
   pause?: boolean;
+  /** Hard render pause: skips the draw entirely while unfocused (vs `pause`,
+   *  which only freezes time but keeps rendering). */
+  paused?: boolean;
   scanlineIntensity?: number;
   glitchAmount?: number;
   flickerAmount?: number;
@@ -260,6 +263,7 @@ export default function FaultyTerminal({
   dpr = Math.min(window.devicePixelRatio || 1, 2),
   pageLoadAnimation = true,
   brightness = 1,
+  paused = false,
   className,
   style,
   ...rest
@@ -273,6 +277,12 @@ export default function FaultyTerminal({
   const rafRef = useRef<number>(0);
   const loadAnimationStartRef = useRef<number>(0);
   const timeOffsetRef = useRef<number>(Math.random() * 100);
+
+  // Ref-driven so toggling focus gates the loop without recreating the context.
+  const pausedRef = useRef(paused);
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   const tintVec = useMemo(() => hexToRgb(tint), [tint]);
 
@@ -348,6 +358,8 @@ export default function FaultyTerminal({
 
     const update = (t: number) => {
       rafRef.current = requestAnimationFrame(update);
+      // Idle while unfocused: keep the context + last frame, skip the draw.
+      if (pausedRef.current) return;
 
       if (pageLoadAnimation && loadAnimationStartRef.current === 0) {
         loadAnimationStartRef.current = t;

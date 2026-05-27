@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import type { WorkEntry } from '@/lib/content';
 import { SectionThemeWrapper, type SectionTheme } from './ThemeProvider';
 import { GlitchRedacted } from './GlitchRedacted';
+import { ScrambleText } from './ScrambleText';
 import { SectionBackground, hasSectionBackground } from './SectionBackground';
 
 interface WorkSectionProps {
@@ -65,6 +66,8 @@ export function WorkSection({ entry, index, total, artwork, onOpen }: WorkSectio
               total={total}
               isLocked={isLocked}
               onOpen={onOpen}
+              active={inView}
+              scramble={index === 0}
             />
           </motion.div>
         </div>
@@ -96,6 +99,8 @@ export function WorkSection({ entry, index, total, artwork, onOpen }: WorkSectio
               total={total}
               isLocked={isLocked}
               onOpen={onOpen}
+              active={inView}
+              scramble={index === 0}
             />
           </motion.div>
 
@@ -118,34 +123,56 @@ function SectionText({
   total,
   isLocked,
   onOpen,
+  active,
+  scramble,
 }: {
   entry: WorkEntry;
   index: number;
   total: number;
   isLocked: boolean;
   onOpen?: () => void;
+  active: boolean;
+  /** Decode the label + title out of glitch glyphs. Reserved for key sections. */
+  scramble: boolean;
 }) {
+  const indexLabel =
+    `${String(index + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}` +
+    (entry.year ? ` · ${entry.year}` : '');
+
+  const labelClass =
+    'font-mono text-[12px] md:text-[13px] tracking-[0.04em] uppercase opacity-70 m-0';
+  const titleClass = 'font-display m-0 leading-[1.05] tracking-[-0.022em]';
+  const titleStyle =
+    entry.slug === 'fountain'
+      ? {
+          fontSize: 'clamp(29px, 4vw, 51px)',
+          fontWeight: 600,
+          letterSpacing: '-0.018em',
+        }
+      : { fontSize: 'clamp(36px, 5vw, 64px)' };
+
   return (
     <>
-      <p className="font-mono text-[12px] md:text-[13px] tracking-[0.04em] uppercase opacity-70 m-0">
-        {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-        {entry.year ? ` · ${entry.year}` : ''}
-      </p>
+      {scramble ? (
+        <ScrambleText as="p" active={active} text={indexLabel} className={labelClass} />
+      ) : (
+        <p className={labelClass}>{indexLabel}</p>
+      )}
 
-      <h2
-        className="font-display m-0 leading-[1.05] tracking-[-0.022em]"
-        style={
-          entry.slug === 'fountain'
-            ? {
-                fontSize: 'clamp(29px, 4vw, 51px)',
-                fontWeight: 600,
-                letterSpacing: '-0.018em',
-              }
-            : { fontSize: 'clamp(36px, 5vw, 64px)' }
-        }
-      >
-        {entry.title}
-      </h2>
+      {scramble ? (
+        <ScrambleText
+          as="h2"
+          active={active}
+          text={entry.title}
+          delay={220}
+          className={titleClass}
+          style={titleStyle}
+        />
+      ) : (
+        <h2 className={titleClass} style={titleStyle}>
+          {entry.title}
+        </h2>
+      )}
 
       {entry.description && (
         <p className="font-sans text-[15px] md:text-[16px] leading-[1.55] max-w-[44ch] opacity-90 m-0">

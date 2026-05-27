@@ -10,7 +10,7 @@ description: CRM, conversational. Salesforce records, Agentforce, and approvals 
 publicReference: https://slack.com/features/crm
 href: https://slack.com/features/crm
 external: false
-bg: "#4A154B"
+bg: "#0A0510"
 ink: "#F4EDF7"
 accent: "#ECB22E"
 statement: "I lead design for Salesforce in Slack — CRM, conversational."

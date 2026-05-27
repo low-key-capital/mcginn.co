@@ -66,6 +66,14 @@ const GradientBlinds: React.FC<GradientBlindsProps> = ({
   const lastTimeRef = useRef<number>(0);
   const firstResizeRef = useRef<boolean>(true);
 
+  // Drive pause through a ref so toggling it gates the render loop without
+  // re-running the setup effect (which would destroy + recreate the WebGL
+  // context on every focus change — a visible flash).
+  const pausedRef = useRef(paused);
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -312,6 +320,8 @@ void main() {
 
     const loop = (t: number) => {
       rafRef.current = requestAnimationFrame(loop);
+      // Idle while unfocused: keep the context + last frame, skip all work.
+      if (pausedRef.current) return;
       uniforms.iTime.value = t * 0.001;
       if (mouseDampening > 0) {
         if (!lastTimeRef.current) lastTimeRef.current = t;
@@ -327,7 +337,7 @@ void main() {
       } else {
         lastTimeRef.current = t;
       }
-      if (!paused && programRef.current && meshRef.current) {
+      if (programRef.current && meshRef.current) {
         try {
           renderer.render({ scene: meshRef.current });
         } catch (e) {
@@ -360,7 +370,6 @@ void main() {
     };
   }, [
     dpr,
-    paused,
     gradientColors,
     angle,
     noise,

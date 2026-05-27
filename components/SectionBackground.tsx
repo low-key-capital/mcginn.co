@@ -9,7 +9,7 @@ import { useTheme } from './ThemeProvider';
 // two WebGL contexts are ever live on this single-page scroll.
 const DotField = dynamic(() => import('./backgrounds/DotField'), { ssr: false });
 const FaultyTerminal = dynamic(() => import('./backgrounds/FaultyTerminal'), { ssr: false });
-const LiquidEther = dynamic(() => import('./backgrounds/LiquidEther'), { ssr: false });
+const Beams = dynamic(() => import('./backgrounds/Beams'), { ssr: false });
 const GradientBlinds = dynamic(() => import('./backgrounds/GradientBlinds'), { ssr: false });
 const Grainient = dynamic(() => import('./backgrounds/Grainient'), { ssr: false });
 const Ballpit = dynamic(() => import('./backgrounds/Ballpit'), { ssr: false });
@@ -24,7 +24,7 @@ interface BackgroundConfig {
    * would clash with the section's flat background at the seams).
    */
   fade?: 'both' | 'top' | 'none';
-  render: (isMobile: boolean) => ReactNode;
+  render: (isMobile: boolean, paused: boolean) => ReactNode;
 }
 
 // Each project's effect is themed to its own palette and echoes the metaphor
@@ -37,7 +37,7 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
   // casting a dark shadow.
   'salesforce-google-workspace': {
     opacity: 0.85,
-    render: () => (
+    render: (_isMobile, paused) => (
       <DotField
         dotSpacing={16}
         dotRadius={1.6}
@@ -46,13 +46,14 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
         gradientFrom="rgba(255, 255, 255, 0.85)"
         gradientTo="rgba(251, 188, 4, 0.7)"
         glowColor="#1A73E8"
+        paused={paused}
       />
     ),
   },
   // OpenAI — a faulty CRT terminal in clean white.
   'salesforce-openai-mcp': {
     opacity: 0.9,
-    render: () => (
+    render: (_isMobile, paused) => (
       <FaultyTerminal
         tint="#ffffff"
         scale={1.6}
@@ -65,21 +66,25 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
         mouseReact
         mouseStrength={0.5}
         pageLoadAnimation
+        paused={paused}
       />
     ),
   },
-  // Salesforce in Slack — a liquid ether fluid in a softer, more complementary
-  // slice of Slack's palette (no harsh red), stirred gently by the cursor.
+  // Salesforce in Slack — beams of light raking across the aubergine, a calmer
+  // focal effect than the old fluid sim.
   'salesforce-in-slack': {
     opacity: 0.85,
-    render: () => (
-      <LiquidEther
-        colors={['#2EB67D', '#36C5F0', '#ECB22E']}
-        mouseForce={14}
-        cursorSize={90}
-        autoDemo
-        autoSpeed={0.3}
-        autoIntensity={1.4}
+    render: (_isMobile, paused) => (
+      <Beams
+        beamNumber={14}
+        beamWidth={2.2}
+        beamHeight={18}
+        lightColor="#E6CBEC"
+        speed={2}
+        noiseIntensity={1.6}
+        scale={0.2}
+        rotation={32}
+        paused={paused}
       />
     ),
   },
@@ -87,7 +92,7 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
   // spotlight that tracks the cursor.
   'salesforce-suite': {
     opacity: 0.8,
-    render: () => (
+    render: (_isMobile, paused) => (
       <GradientBlinds
         gradientColors={['#0E76B5', '#00A0E0', '#8FD8F4']}
         angle={20}
@@ -97,6 +102,7 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
         spotlightOpacity={0.9}
         mouseDampening={0.15}
         mixBlendMode="lighten"
+        paused={paused}
       />
     ),
   },
@@ -204,7 +210,7 @@ export function SectionBackground({ slug }: { slug: string }) {
         WebkitMaskImage: edgeFade,
       }}
     >
-      {mounted ? config.render(isMobile) : null}
+      {mounted ? config.render(isMobile, !focused) : null}
     </div>
   );
 }

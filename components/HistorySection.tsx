@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import Link from 'next/link';
 import type { WorkEntry } from '@/lib/content';
 import { SectionThemeWrapper, type SectionTheme } from './ThemeProvider';
+import { ScrambleText } from './ScrambleText';
 
 interface HistorySectionProps {
   entry: WorkEntry;
@@ -56,7 +57,7 @@ export function HistorySection({ entry }: HistorySectionProps) {
             className="md:col-span-5 md:row-start-1 font-display m-0 leading-[1.05] tracking-[-0.022em] whitespace-nowrap"
             style={{ fontSize: 'clamp(28px, 3.6vw, 44px)' }}
           >
-            {entry.title}
+            <ScrambleText as="span" active={inView} text={entry.title} delay={220} />
           </motion.h2>
 
           {/* Row 1, right — small editorial label (desktop only) */}
@@ -64,7 +65,7 @@ export function HistorySection({ entry }: HistorySectionProps) {
             {...reveal}
             className="hidden md:block md:col-span-7 md:row-start-1 font-mono text-[11px] uppercase tracking-[0.06em] opacity-55 m-0"
           >
-            Selected · A–Z
+            <ScrambleText as="span" active={inView} text="Selected · A–Z" />
           </motion.p>
 
           {/* Row 2, left — subtext + CTAs (aligned with the list start) */}
