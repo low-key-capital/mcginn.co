@@ -27,7 +27,7 @@ const ROLES: RoleEntry[] = [
     title: 'Salesforce + Slack',
     location: 'San Francisco, CA',
     detail:
-      'Lead design + architecture across Salesforce and Slack. Joined Salesforce as Principal Product Designer in Feb 2021; grew through Director and Senior Director into broader leadership across Suite and Slack.\n\nLead design for Agentic experience — making AI feel like part of the work, not a separate tool. Shape conversation-driven, trustworthy agentic systems that unify Salesforce and Slack at enterprise scale. Recent and current work spans the integration of Salesforce CRM into Slack, the Salesforce / OpenAI MCP integration, the Salesforce / Google Workspace integration, Salesforce Suite, and applying the new SLDS2 design system.',
+      'Lead design + architecture across Salesforce and Slack. Joined Salesforce as Principal Product Designer in Feb 2021; grew through Director and Senior Director into broader leadership across Suite and Slack.\n\nLead design for Agentic experience — making AI feel like part of the work, not a separate tool. Shape conversation-driven, trustworthy agentic systems that unify Salesforce and Slack at enterprise scale. Recent and current work spans the integration of Salesforce CRM into Slack, the Salesforce / Google Workspace integration, Salesforce Suite, and applying the new SLDS2 design system.',
     outcomes: [
       'Architected platforms across Salesforce + Slack that grew multi-billion ARR.',
       'Pioneered design-led trust and governance frameworks for agentic AI now shaping the future of enterprise platforms.',

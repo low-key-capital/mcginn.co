@@ -8,7 +8,6 @@ import { useTheme } from './ThemeProvider';
 // near the viewport (see the IntersectionObserver below), so at most one or
 // two WebGL contexts are ever live on this single-page scroll.
 const DotField = dynamic(() => import('./backgrounds/DotField'), { ssr: false });
-const FaultyTerminal = dynamic(() => import('./backgrounds/FaultyTerminal'), { ssr: false });
 const Beams = dynamic(() => import('./backgrounds/Beams'), { ssr: false });
 const GradientBlinds = dynamic(() => import('./backgrounds/GradientBlinds'), { ssr: false });
 const Grainient = dynamic(() => import('./backgrounds/Grainient'), { ssr: false });
@@ -46,26 +45,6 @@ const BACKGROUNDS: Record<string, BackgroundConfig> = {
         gradientFrom="rgba(255, 255, 255, 0.85)"
         gradientTo="rgba(251, 188, 4, 0.7)"
         glowColor="#1A73E8"
-        paused={paused}
-      />
-    ),
-  },
-  // OpenAI — a faulty CRT terminal in clean white.
-  'salesforce-openai-mcp': {
-    opacity: 0.9,
-    render: (_isMobile, paused) => (
-      <FaultyTerminal
-        tint="#ffffff"
-        scale={1.6}
-        digitSize={0.7}
-        timeScale={0.5}
-        noiseAmp={0.5}
-        brightness={0.3}
-        scanlineIntensity={0}
-        curvature={0}
-        mouseReact
-        mouseStrength={0.5}
-        pageLoadAnimation
         paused={paused}
       />
     ),

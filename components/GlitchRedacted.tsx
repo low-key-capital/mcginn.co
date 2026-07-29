@@ -128,44 +128,6 @@ function envelope(): Mask {
   return m;
 }
 
-function openaiOrganizing(): Mask {
-  // LLMs organizing characters: chaos at the top resolves into coherent text
-  // by the bottom. Three vertical zones — scattered tokens, emerging
-  // clusters, then dense word-like rows.
-  const m = makeGrid(13, COLS);
-  const r = mulberry32(hashSeed('openai-organize'));
-
-  // Zone 1 (rows 0–3): sparse scatter, density increasing with depth.
-  for (let row = 0; row < 4; row++) {
-    const density = 0.06 + row * 0.04;
-    for (let col = 0; col < COLS; col++) {
-      if (r() < density) m[row][col] = true;
-    }
-  }
-
-  // Zone 2 (rows 4–7): emerging clusters — wider gaps, shorter words.
-  for (let row = 4; row < 8; row++) {
-    let col = Math.floor(r() * 4);
-    while (col < COLS) {
-      const wordLen = 2 + Math.floor(r() * 4);
-      for (let k = 0; k < wordLen && col + k < COLS; k++) m[row][col + k] = true;
-      col += wordLen + 2 + Math.floor(r() * 4);
-    }
-  }
-
-  // Zone 3 (rows 8–12): dense aligned text — longer words, smaller gaps.
-  for (let row = 8; row < 13; row++) {
-    let col = Math.floor(r() * 2);
-    while (col < COLS - 1) {
-      const wordLen = 3 + Math.floor(r() * 6);
-      for (let k = 0; k < wordLen && col + k < COLS; k++) m[row][col + k] = true;
-      col += wordLen + 1 + Math.floor(r() * 2);
-    }
-  }
-
-  return m;
-}
-
 function slackMessages(): Mask {
   const m = makeGrid(12, COLS);
   fillRect(m, 2, 1, 4, 2); fillRect(m, 8, 1, 12, 2);
@@ -238,7 +200,6 @@ function ijmHeart(): ShapeResult {
 
 const CUSTOM_SHAPES: Record<string, ShapeFn> = {
   'salesforce-google-workspace': envelope,
-  'salesforce-openai-mcp': openaiOrganizing,
   'salesforce-in-slack': slackMessages,
   'salesforce-suite': funnelStaged,
   elevar: elevarBarChart,
